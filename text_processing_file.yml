@@ -1,0 +1,19 @@
+tags: 
+  - name: 3. Text Processing File
+get:
+  description: Teks yang akan diproses
+consumes:
+  - multipart/form-data
+parameters:
+  - name: upfile
+    in: formData
+    type: file
+    description: The file to upload.
+    required: true
+responses:
+    '200':
+      description: Successful response
+    '400':
+      description: Bad Request
+    '500':
+      description: Internal Server Error

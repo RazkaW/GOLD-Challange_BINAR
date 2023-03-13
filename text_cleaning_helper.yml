@@ -1,0 +1,44 @@
+import re 
+import pandas as pd
+
+def lowercase(text):
+    return text.lower() 
+
+def remove_unnecessary_char(text):
+    text = re.sub('\n',' ',text) # Remove every '\n'
+    text = re.sub('rt',' ',text) # Remove every retweet symbol
+    text = re.sub('user',' ',text) # Remove every username
+    text = re.sub('((www\.[^\s]+)|(https?://[^\s]+)|(http?://[^\s]+))',' ',text) # Remove every URL
+    text = re.sub('  +', ' ', text) # Remove extra spaces
+    text = re.sub(r'pic.twitter.com.[\w]+', '', text) # Remove every pic 
+    text = re.sub('gue','saya',text) # Sub gue saya
+    text = re.sub(r':', '', text) #Remove symbol :
+    text = re.sub(r'‚Ä¶', '', text) #Remove symbol Ä¶
+    return text
+
+def remove_nonaplhanumeric(text):
+    text = re.sub('[^0-9a-zA-Z]+', ' ', text) 
+    return text
+
+#Merubah alay dataframe menjadi dictionary
+alay_dict = pd.read_csv('/docs/new_kamusalay.csv', encoding='iso-8859-1', header=None)
+alay_dict = alay_dict.rename(columns={ 0: "Original", 1: "Replacement"})
+alay_dict_map = dict(zip(alay_dict['Original'], alay_dict['Replacement']))
+
+#Merubah kata-kata alay menjadi kata baku
+def normalize_alay(text):
+    return ' '.join([alay_dict_map[word] if word in alay_dict_map else word for word in text.split(' ')])
+
+def preprocess(text):
+    text = lowercase(text)
+    text = remove_unnecessary_char(text)
+    text = remove_nonaplhanumeric(text)
+    text = normalize_alay(text)
+    return text
+
+
+    #Menguji Syntax Data Cleaning dengan beberpa kalimat contoh
+print("remove_nonaplhanumeric: ", remove_nonaplhanumeric("Halooo,,,,, duniaa!!"))
+print("lowercase: ", lowercase("Halooo, duniaa!"))
+print("remove_unnecessary_char: ", remove_unnecessary_char("Hehe\n\n RT rt USER USER apa kabs www.google.com\n  hehe"))
+print("normalize_alay: ", normalize_alay("aamiin adek abis"))
