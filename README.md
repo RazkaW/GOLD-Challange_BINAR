@@ -1,5 +1,5 @@
 # Project_Gold_DSC
-by Al Rizky Maulana
+by Razka Wildan
 
 Donwload all file:
 1. Open file **Exploration Data Challange.ipynb** to explore dataset and growing information in data kaggle
